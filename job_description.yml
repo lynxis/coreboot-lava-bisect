@@ -1,0 +1,54 @@
+device_type: thinkpad-x60
+job_name: JOBNAME
+
+timeouts:
+  job:
+    minutes: 5
+  action:
+    minutes: 5
+  connection:
+    minutes: 5
+
+visibility: public
+
+actions:
+  - deploy:
+      to: flashrom
+      coreboot:
+        url: COREBOOTURL
+      os: debian
+
+  - boot:
+      timeout:
+        minutes: 5
+      method: flashrom
+      connection: serial
+      auto_login: {login_prompt: 'login:', username: root, password_prompt: 'Password:', password: coreboot}
+      prompts:
+        - 'root@lava:~#'
+        - 'root@x60:~#'
+
+  - deploy:
+      to: ssh
+      os: debian
+      prompts:
+        - 'root@lava:~#'
+        - 'root@x60:~#'
+
+  - boot:
+      method: ssh
+      connection: ssh
+      prompts:
+        - 'root@lava:~#'
+        - 'root@x60:~#'
+
+  - test:
+      timeout:
+        minutes: 5
+      name: singlenode-mustang-demo
+      definitions:
+        - repository: http://git.linaro.org/people/neil.williams/temp-functional-tests.git
+          from: git
+          path: singlenode/singlenode03.yaml
+          name: singlenode-advanced
+
