@@ -6,7 +6,7 @@
 - compile-ready coreboot
 - a working http/ftp server to copy coreboot images to using scp
 
-## overview
+## Overview
 
 Basic 4 steps what the bisect.sh do
 - compile coreboot
@@ -16,9 +16,11 @@ Basic 4 steps what the bisect.sh do
 
 ## How to use it?
 
+```
 cd coreboot
 git bisect start
 git bisect bad REV
 git bisect good REV
 git bisect run /path/to/this/dir/bisect.sh
+```
 
