@@ -6,6 +6,8 @@
 # a script to use it with git
 # run it with git bisect
 
+ROOT=$(dirname $0)
+
 if [ -z $CPU ] ; then
 	CPU="$(grep -c 'processor' /proc/cpuinfo)"
 fi
@@ -44,15 +46,14 @@ compile_coreboot() {
 job_template() {
 	local job_name="$1"
 	local file_name="$2"
-	sed "s!COREBOOTURL!${COREBOOTURL}!g" "$TEMPLATE" | \
-		sed "s!JOBNAME!${job_name}!g" > "job_${job_name}"
+	sed "s!COREBOOTURL!${COREBOOTURL}!g" "$ROOT/$TEMPLATE" | \
+		sed "s!JOBNAME!${job_name}!g" > "$file_name"
 }
 
 job_submit() {
 	# submit a job by using a template
-	git_hash=$1
-	cp "$TEMPLATE" "job_$git_hash.yml"
-	lava-tool submit-job "$LAVASERVER" "$TEMPLATE"
+	local file_name=$1
+	lava-tool submit-job "$LAVASERVER" "$file_name"
 }
 
 copy_coreboot() {
@@ -68,6 +69,7 @@ fi
 copy_coreboot
 job_template "git_bisect_${GIT_HASH}" "job_${GIT_HASH}"
 JOB_ID=$(job_submit "$GIT_HASH" "job_${GIT_HASH}")
+copy_coreboot
 
 echo "wait until job $JOB_ID is done"
 while ! job_done ; do
