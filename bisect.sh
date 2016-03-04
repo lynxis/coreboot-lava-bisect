@@ -8,8 +8,8 @@
 
 ROOT=$(dirname $0)
 
-if [ -z $CPU ] ; then
-	CPU="$(grep -c 'processor' /proc/cpuinfo)"
+if [ -z "$CPUS" ] ; then
+	CPUS="$(grep -c 'processor' /proc/cpuinfo)"
 fi
 
 if [ -z "$LAVAURL" ] ; then
