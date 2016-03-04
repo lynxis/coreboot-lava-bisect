@@ -37,9 +37,15 @@ job_done() {
 }
 
 compile_coreboot() {
-	yes "" | make oldconfig
-	make clean || true
-	make -j$(CPUS)
+	local i=3
+	while [ $i > 0 ] ; do
+		yes "" | make oldconfig
+		make clean || true
+		make -j${CPUS}
+		if [ $? -eq 0 ] ; then
+			break
+		fi
+	done
 	stat build/coreboot.rom 2>/dev/null >/dev/null
 }
 
