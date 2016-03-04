@@ -99,7 +99,7 @@ fi
 
 copy_coreboot
 job_template "git_bisect_${GIT_HASH}" "job_${GIT_HASH}"
-JOB_ID=$(job_submit "$GIT_HASH" "job_${GIT_HASH}")
+JOB_ID=$(job_submit "job_${GIT_HASH}" | awk -F': ' '{print $2}')
 
 echo "wait until job $JOB_ID is done"
 while ! job_done ; do
