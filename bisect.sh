@@ -62,6 +62,31 @@ job_submit() {
 	lava-tool submit-job "$LAVAURL" "$file_name"
 }
 
+job_status() {
+	# return 0 = SUCESSFUL
+	# return 1 = Incomplete
+	# return 125 = unknown error
+	local jobid="$1"
+	local status=$(lava-tool job-status "$LAVAURL" $jobid |grep '^Job Status:')
+	if [ $? -ne 0 ] ; then
+		# can not get job status
+		return 125
+	fi
+	status=$(echo $status | awk -F': ' '{print $2}')
+	case "$status" in
+		"Complete")
+			return 0
+			;;
+		"Incomplete")
+			return 1
+			;;
+		*)
+			# Submitted|Running|Canceled|Canceling
+			return 125
+			;;
+	esac
+}
+
 copy_coreboot() {
 	scp build/coreboot.rom "$COREBOOT_SCP_URL"
 }
@@ -82,3 +107,6 @@ while ! job_done ; do
 	echo -n .
 	sleep 1
 done
+
+job_status $JOB_ID
+exit $?
