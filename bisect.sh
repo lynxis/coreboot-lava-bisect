@@ -24,8 +24,8 @@ if [ -z "$COREBOOTURL" ] ; then
 	exit -1
 fi
 
-if [ -z "$COREBOOT_COPY_URL" ] ; then
-	echo "You need to define a url COREBOOT_COPY_URL"
+if [ -z "$COREBOOT_SCP_URL" ] ; then
+	echo "You need to define a url COREBOOT_SCP_URL"
 	exit -1
 fi
 
@@ -57,7 +57,7 @@ job_submit() {
 }
 
 copy_coreboot() {
-	scp build/coreboot.rom "$COREBOOT_COPY_URL"
+	scp build/coreboot.rom "$COREBOOT_SCP_URL"
 }
 
 GIT_HASH="$(git log -1 --format=format:%h)"
