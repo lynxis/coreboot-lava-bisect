@@ -59,7 +59,7 @@ job_template() {
 job_submit() {
 	# submit a job by using a template
 	local file_name=$1
-	lava-tool submit-job "$LAVASERVER" "$file_name"
+	lava-tool submit-job "$LAVAURL" "$file_name"
 }
 
 copy_coreboot() {
