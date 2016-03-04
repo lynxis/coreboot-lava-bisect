@@ -33,7 +33,7 @@ TEMPLATE=job_description.yml
 
 job_done() {
 	local jobid="$1"
-	lava-tool job-status "$LAVAURL" $jobid |grep -q 'Job Status: Complete'
+	lava-tool job-status "$LAVAURL" $jobid |egrep -q '(Complete|Incomplete|Canceled|Canceling)'
 }
 
 compile_coreboot() {
